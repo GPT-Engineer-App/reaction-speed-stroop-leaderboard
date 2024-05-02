@@ -36,15 +36,24 @@ const Index = () => {
     setEndTime(intervalId);
   };
 
-  const stopTest = () => {
-    clearInterval(endTime);
+  const handleColorClick = (clickedColor) => {
     const finalEndTime = new Date().getTime();
-    setEndTime(finalEndTime);
-    const reactionTime = finalEndTime - startTime;
-    setReactionTime(reactionTime);
-    if (name) {
-      saveResult(reactionTime);
+    if (clickedColor === currentColor) {
+      const reactionTime = finalEndTime - startTime;
+      setReactionTime(reactionTime);
+      if (name) {
+        saveResult(reactionTime);
+      }
+    } else {
+      toast({
+        title: "Incorrect",
+        description: "You clicked the wrong color!",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     }
+    startTest();
   };
 
   const saveResult = async (reactionTime) => {
@@ -76,12 +85,11 @@ const Index = () => {
           <Text fontSize="2xl" color={currentColor}>
             {currentWord}
           </Text>
-          <Button colorScheme="blue" onClick={startTest} m={2}>
-            Start
-          </Button>
-          <Button colorScheme="green" onClick={stopTest} m={2}>
-            Stop
-          </Button>
+          {colors.map((color) => (
+            <Button key={color} colorScheme={color} onClick={() => handleColorClick(color)} m={2}>
+              {color.toUpperCase()}
+            </Button>
+          ))}
           {reactionTime && <Text>Reaction Time: {reactionTime} ms</Text>}
         </Box>
         <Input placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
