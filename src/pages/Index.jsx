@@ -21,19 +21,26 @@ const Index = () => {
   }, []);
 
   const startTest = () => {
-    const colorIndex = getRandomIndex();
-    const wordIndex = getRandomIndex();
-    setCurrentColor(colors[colorIndex]);
-    setCurrentWord(words[wordIndex]);
     setStartTime(new Date().getTime());
     setEndTime(0);
     setReactionTime(null);
+    const changeColorAndWord = () => {
+      const colorIndex = getRandomIndex();
+      const wordIndex = getRandomIndex();
+      setCurrentColor(colors[colorIndex]);
+      setCurrentWord(words[wordIndex]);
+    };
+    changeColorAndWord();
+    const intervalTime = Math.random() * 1500 + 500;
+    const intervalId = setInterval(changeColorAndWord, intervalTime);
+    setEndTime(intervalId);
   };
 
   const stopTest = () => {
-    const endTime = new Date().getTime();
-    setEndTime(endTime);
-    const reactionTime = endTime - startTime;
+    clearInterval(endTime);
+    const finalEndTime = new Date().getTime();
+    setEndTime(finalEndTime);
+    const reactionTime = finalEndTime - startTime;
     setReactionTime(reactionTime);
     if (name) {
       saveResult(reactionTime);
